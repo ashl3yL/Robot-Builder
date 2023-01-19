@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Builder</title>
+</head>
+<style>
+body{
+    font-size: x-large;
+}
+button{
+    font-size: x-large;
+}
+button.imgs{
+    width: 15%;
+}
+.roboimgs{
+    display:flex;
+    justify-content: space-around;
+}
+img{
+    width: 100%;
+}
+.image{
+    width: 25%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<script>
+    function initialize(){
+        firstImg = document.getElementById("img1");
+        secondImg = document.getElementById("img2");
+        thirdImg = document.getElementById("img3");
+        fourthImg = document.getElementById("img4");
+        fifthImg = document.getElementById("img5");
+
+        imgOutput = document.getElementById("finalImg");
+        img = "blank.png";
+
+        typeOutput = document.getElementById("curType");
+        powType = "Power Type: ";
+        type = "No Power Installed";
+        selected = false;
+
+        powOut = document.getElementById("curPow");
+        spdOut = document.getElementById("curSpd");
+        itgOut = document.getElementById("curItg");
+        sButt = document.getElementById("solar");
+        hButt = document.getElementById("hydro");
+        nButt = document.getElementById("nuclear");
+        power = 0;
+        speed = 0;
+        integ = 0;
+        maxPow = 0;
+        maxSpeed = 0;
+        maxItg = 0;
+
+        pP = document.getElementById("plusP");
+        pS = document.getElementById("plusS");
+        pI = document.getElementById("plusI");
+        mP = document.getElementById("minP");
+        mS = document.getElementById("minS");
+        mI = document.getElementById("minI");
+
+        scanOutput = document.getElementById("scanner");
+        defOutput = document.getElementById("defense");
+        scanners = "Off";
+        defensive = "Off";
+
+        finalized = false;
+        display()
+    }
+    function insImg(num){
+        if(num==1) { img = "hydro.png"; }
+        else if(num==2) { img = "solar_1.png"; }
+        else if(num==3) { img = "solar_2.png"; }
+        else if(num==4) { img = "nuclear_1.png"; }
+        else { img = "nuclear_2.png"; }
+        display();
+    }
+    function chType(name){
+        if(name == "solar"){ type = "Solar"; }
+        if(name == "hydro"){ type = "Hydro"; }
+        else{ type = "Nuclear"; }
+
+        selected = true;
+        chMaximum();
+        display()
+    }
+    function chMaximum(){
+        if(type == "Solar"){
+            maxPow = 10;
+            maxSpeed = 10;
+            maxItg = 10;
+        }
+        else if(type == "Hydro"){
+            maxPow = 8;
+            maxSpeed = 12;
+            maxItg = 10;
+        }
+        else if(type == "Nuclear"){
+            maxPow = 12;
+            maxSpeed = 14;
+            maxItg = 4;
+        }
+        keepMax();
+        display();
+    }
+    function keepMax(){
+        if(power > maxPow){ power = maxPow; }
+        if(speed > maxSpeed){ speed = maxSpeed; }
+        if(integ > maxItg){ integ = maxItg; }
+    }
+    function button(name, amt){
+        if(selected){
+            if(name == "powbutt"){
+                if(amt == 1 && power < maxPow){
+                    power++;
+                }
+                else if(amt == -1 && power != 0){
+                    power--;
+                }
+            }
+            else if(name == "spdbutt"){
+                if(amt == 1 && speed < maxSpeed){
+                    speed++;
+                }
+                else if(amt == -1 && speed != 0){
+                    speed--;
+                }
+            }
+            else if(name == "itgbutt"){
+                if(amt == 1 && integ < maxItg){
+                    integ++;
+                }
+                else if(amt == -1 && integ != 0){
+                    integ--;
+                }
+            }
+        }
+        display();
+    }
+    function onOff(name){
+        if(!finalized){
+            if(selected){
+                if(name == "scan"){
+                    if(scanners == "Off"){
+                        scanners = "On";
+                    }
+                    else{
+                        scanners = "Off";
+                    }
+                }
+                else{
+                    if(defensive == "Off"){
+                        defensive = "On";
+                    }
+                    else{
+                        defensive = "Off";
+                    }
+                }
+            }
+        }
+        display();
+    }
+    function finalize(){
+        firstImg.style.display = "none";
+        secondImg.style.display = "none";
+        thirdImg.style.display = "none";
+        fourthImg.style.display = "none";
+        fifthImg.style.display = "none";
+        sButt.style.display = "none";
+        hButt.style.display = "none";
+        nButt.style.display = "none";
+        pP.style.display = "none";
+        pS.style.display = "none";
+        pI.style.display = "none";
+        mP.style.display = "none";
+        mS.style.display = "none";
+        mI.style.display = "none";
+        finalized = true;
+    }
+    function display(){
+        imgOutput.src = img;
+        typeOutput.innerHTML = powType + type;
+        powOut.innerHTML = power;
+        spdOut.innerHTML = speed;
+        itgOut.innerHTML = integ;
+        scanOutput.innerHTML = scanners;
+        defOutput.innerHTML = defensive;
+    }
+
+</script>
+<body onload = "initialize();">
+    <h1>Robot Builder</h1>
+    <p>Create a Robot! Select an image. Then start by selecting a power type. The other adjustments can't be made until the power type is selected. </p>
+    <hr>
+    <div class = "image"> <img id = "finalImg" src = "blank.png"/> </div>
+    <div class = "roboimgs"> 
+        <button class = "imgs" onclick = "insImg(1);" id = "img1"> <img src="hydro.png"/> </button>
+        <button class = "imgs" onclick = "insImg(2);" id = "img2"> <img src="solar_1.png"/> </button>
+        <button class = "imgs" onclick = "insImg(3);" id = "img3"> <img src="solar_2.png"/> </button>
+        <button class = "imgs" onclick = "insImg(4);" id = "img4"> <img src="nuclear_1.png"/> </button>
+        <button class = "imgs" onclick = "insImg(5);" id = "img5"> <img src="nuclear_2.png"/> </button>
+    </div>
+    <hr>
+    <div class = "type">
+        <span id = "curType"></span> <br> <br>
+        <button onclick = "chType('solar');" id = "solar">Solar</button>
+        <button onclick = "chType('hydro');" id = "hydro">Hydro</button>
+        <button onclick = "chType('nuclear');" id = "nuclear">Nuclear</button>
+    </div>
+    <br> <hr> <br>
+    <span class = "label">Power Level: </span>
+    <span class = "val" id = "curPow"></span>
+    <button onclick = "button('powbutt', 1);" id = "plusP">+</button>
+    <button onclick = "button('powbutt', -1);" id = "minP">-</button>
+    <br><br>
+    <span class = "label">Highest Speed: </span>
+    <span class = "val" id = "curSpd"></span>
+    <button onclick = "button('spdbutt', 1);" id = "plusS">+</button>
+    <button onclick = "button('spdbutt', -1);" id = "minS">-</button>
+    <br><br>
+    <span class = "label">Structural Integrity: </span>
+    <span class = "val" id = "curItg"></span>
+    <button onclick = "button('itgbutt', 1);" id = "plusI">+</button>
+    <button onclick = "button('itgbutt', -1);" id = "minI">-</button>
+    <br><br>
+    <span class = "label">Scanners: </span>
+    <button onclick = "onOff('scan');" id = "scanner"></button>
+    <br><br>
+    <span class = "label">Defense: </span>
+    <button onclick = "onOff('def');" id = "defense"></button>
+    <br><br>
+    <button onclick = "finalize();">Finalize</button>
+</body>
+</html>
